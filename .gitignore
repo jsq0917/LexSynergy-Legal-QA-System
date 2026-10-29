@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.env
+logs/*.log
+data/uploads/
+*.egg-info/
+.DS_Store
+.workbuddy/
+.screenshots/
+
+# 生成产物（用 scripts.build_corpus / build_embeddings 重建）
+data/corpus/
+eval/results/

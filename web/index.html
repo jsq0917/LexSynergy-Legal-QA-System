@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LexSynergy · 法律合规问答</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <strong>LexSynergy</strong>
+      <span class="sub">劳动用工 / 民法典 · 多智能体问答</span>
+    </div>
+    <div class="badges" id="badges">
+      <span class="tag muted">等待提问</span>
+    </div>
+  </header>
+
+  <main class="grid">
+    <!-- 左：输入 -->
+    <section class="col left">
+      <label class="label" for="query">你的问题</label>
+      <textarea id="query" rows="5" placeholder="例：公司裁员，我 2021 年 3 月入职，月薪 12000，能拿多少经济补偿？"></textarea>
+
+      <label class="label" for="facts">结构化事实（可选，JSON）</label>
+      <input id="facts" type="text" placeholder='{"monthly_wage":12000,"start_date":"2021-03-01","end_date":"2026-10-20"}' />
+
+      <div class="row">
+        <button id="ask" class="primary">提问</button>
+        <button id="clear" class="ghost">清空</button>
+      </div>
+
+      <div class="label">示例</div>
+      <div class="chips" id="chips"></div>
+
+      <p class="hint">
+        时间线里 <code>快速通道</code> = 单次生成 + 四道确定性闸；
+        <code>全编排</code> = 分诊 + 检索 + 测算 + 生成 + 五道闸 + 回路。
+      </p>
+    </section>
+
+    <!-- 中：答案 -->
+    <section class="col center">
+      <div class="status" id="status">尚未提问</div>
+      <article id="answer" class="answer"></article>
+      <div class="disclaimer">以上为辅助分析，不构成法律意见；具体以裁判机关认定为准。</div>
+    </section>
+
+    <!-- 右：时间线 / 证据 / 校验 -->
+    <aside class="col right">
+      <div class="panel">
+        <h3>协作时间线 <span class="count" id="timeline-count"></span></h3>
+        <ol id="timeline" class="timeline"><li class="empty">提问后显示每一步</li></ol>
+      </div>
+
+      <div class="panel">
+        <h3>证据 <span class="count" id="ev-count"></span></h3>
+        <ul id="evidence" class="evidence"><li class="empty">尚未检索</li></ul>
+      </div>
+
+      <div class="panel">
+        <h3>校验裁决</h3>
+        <div id="verify" class="verify"><span class="muted">尚未校验</span></div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

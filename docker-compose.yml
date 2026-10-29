@@ -1,0 +1,37 @@
+# 单镜像多服务：四个专家 + 一个网关，各自独立进程/端口/生命周期。
+# 优点：专家可以单独重启、单独扩容、单独看日志；缺点是比单进程多一层序列化，
+# 这也是为什么单测默认走 inproc（AGENT_TRANSPORT=inproc），只有演示/压测才走 a2a。
+
+services:
+  statute:
+    build: .
+    command: ["python", "-m", "app.runtime", "agent", "statute", "--port", "5101"]
+    ports: ["5101:5101"]
+    environment:
+      LOG_LEVEL: INFO
+
+  calc:
+    build: .
+    command: ["python", "-m", "app.runtime", "agent", "calc", "--port", "5102"]
+    ports: ["5102:5102"]
+
+  compliance:
+    build: .
+    command: ["python", "-m", "app.runtime", "agent", "compliance", "--port", "5103"]
+    ports: ["5103:5103"]
+    environment:
+      LLM_API_KEY: ${LLM_API_KEY:-}
+
+  verifier:
+    build: .
+    command: ["python", "-m", "app.runtime", "agent", "verifier", "--port", "5104"]
+    ports: ["5104:5104"]
+
+  api:
+    build: .
+    command: ["python", "-m", "uvicorn", "app.api.main:app", "--host", "0.0.0.0", "--port", "8201"]
+    ports: ["8201:8201"]
+    environment:
+      AGENT_TRANSPORT: inproc        # 单容器内先走进程内；全服务化时改 a2a
+      LLM_API_KEY: ${LLM_API_KEY:-}
+    depends_on: [statute, calc, compliance, verifier]
